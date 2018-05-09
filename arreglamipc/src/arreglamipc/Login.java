@@ -5,6 +5,9 @@
  */
 package arreglamipc;
 
+import Clases.Empleado;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author alumno
@@ -16,6 +19,9 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+         this.setLocationRelativeTo(null);
+        jLabelIcono.setFocusable(true);
+        empleado = null;
     }
 
     /**
@@ -27,31 +33,146 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jLabelIcono = new javax.swing.JLabel();
+        jTextFieldNombre = new javax.swing.JTextField();
+        jPasswordField1 = new javax.swing.JPasswordField();
+        jButtonEntrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\alumno\\Documents\\NetBeansProjects\\git\\arreglamipc\\arreglamipc\\imagenes\\1.jpg")); // NOI18N
+        jLabelIcono.setIcon(new javax.swing.ImageIcon("C:\\Users\\alumno\\Documents\\NetBeansProjects\\git\\arreglamipc\\arreglamipc\\imagenes\\1.jpg")); // NOI18N
+
+        jTextFieldNombre.setFont(new java.awt.Font("Tahoma", 2, 14)); // NOI18N
+        jTextFieldNombre.setForeground(new java.awt.Color(153, 153, 153));
+        jTextFieldNombre.setText("Usuario");
+        jTextFieldNombre.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldNombreFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldNombreFocusLost(evt);
+            }
+        });
+        jTextFieldNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldNombreActionPerformed(evt);
+            }
+        });
+
+        jPasswordField1.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jPasswordField1.setForeground(new java.awt.Color(153, 153, 153));
+        jPasswordField1.setText("Contraseña");
+        jPasswordField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jPasswordField1FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jPasswordField1FocusLost(evt);
+            }
+        });
+        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordField1ActionPerformed(evt);
+            }
+        });
+
+        jButtonEntrar.setText("Entrar");
+        jButtonEntrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEntrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(152, 152, 152)
-                .addComponent(jLabel1)
-                .addContainerGap(146, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(118, 118, 118)
+                        .addComponent(jLabelIcono))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(151, 151, 151)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(245, Short.MAX_VALUE))
+                .addComponent(jLabelIcono)
+                .addGap(28, 28, 28)
+                .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46)
+                .addComponent(jButtonEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextFieldNombreFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNombreFocusGained
+        if(jTextFieldNombre.getText().equalsIgnoreCase("Usuario")){
+            jTextFieldNombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+            jTextFieldNombre.setForeground(new java.awt.Color(0, 0, 0));
+            jTextFieldNombre.setText("");
+        }
+    }//GEN-LAST:event_jTextFieldNombreFocusGained
+
+    private void jTextFieldNombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNombreFocusLost
+        if(jTextFieldNombre.getText().equalsIgnoreCase("")){
+            jTextFieldNombre.setFont(new java.awt.Font("Tahoma", 2, 14)); // NOI18N
+            jTextFieldNombre.setForeground(new java.awt.Color(153, 153, 153));
+            jTextFieldNombre.setText("Usuario");
+        }
+    }//GEN-LAST:event_jTextFieldNombreFocusLost
+
+    private void jTextFieldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldNombreActionPerformed
+
+    private void jPasswordField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPasswordField1FocusGained
+        if(jPasswordField1.getText().equalsIgnoreCase("contraseña")){
+            jPasswordField1.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+            jPasswordField1.setForeground(new java.awt.Color(0, 0, 0));
+            jPasswordField1.setText("");
+        }
+    }//GEN-LAST:event_jPasswordField1FocusGained
+
+    private void jPasswordField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPasswordField1FocusLost
+        if(jPasswordField1.getText().equalsIgnoreCase("")){
+            jPasswordField1.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+            jPasswordField1.setForeground(new java.awt.Color(153, 153, 153));
+            jPasswordField1.setText("Contraseña");
+        }
+    }//GEN-LAST:event_jPasswordField1FocusLost
+
+    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordField1ActionPerformed
+
+    private void jButtonEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEntrarActionPerformed
+        //empleado = login(jTextFieldNombre.getText(),jPasswordField1.getText());
+        
+        if(empleado!=null){
+            
+            if(empleado.getCategoria().equalsIgnoreCase("tecnico")){
+                
+            }else if(empleado.getCategoria().equalsIgnoreCase("comercial")){
+                
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Usuaario o contraseña incorrectos");
+
+        }
+
+    }//GEN-LAST:event_jButtonEntrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -87,8 +208,11 @@ public class Login extends javax.swing.JFrame {
             }
         });
     }
-
+    private Empleado empleado;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButtonEntrar;
+    private javax.swing.JLabel jLabelIcono;
+    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JTextField jTextFieldNombre;
     // End of variables declaration//GEN-END:variables
 }
