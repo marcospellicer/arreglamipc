@@ -160,18 +160,26 @@ public class Login extends javax.swing.JFrame {
     private void jButtonEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEntrarActionPerformed
         //empleado = login(jTextFieldNombre.getText(),jPasswordField1.getText());
         
-        if(empleado!=null){
+       // if(empleado!=null){
             
-            if(empleado.getCategoria().equalsIgnoreCase("tecnico")){
+            //if(empleado.getCategoria().equalsIgnoreCase("tecnico")){
                 
+                SesionTecnico v = new SesionTecnico(empleado);
+                v.setVisible(true);
+                v.setLocationRelativeTo(this);
+                this.dispose();
+          /*      
             }else if(empleado.getCategoria().equalsIgnoreCase("comercial")){
-                
+                SesionComerical v = new SesionComerical(empleado);
+                v.setVisible(true);
+                v.setLocationRelativeTo(this);
+                this.dispose();
             }
         }else{
             JOptionPane.showMessageDialog(null, "Usuaario o contraseña incorrectos");
 
         }
-
+*/
     }//GEN-LAST:event_jButtonEntrarActionPerformed
 
     /**
