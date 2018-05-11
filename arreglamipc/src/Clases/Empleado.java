@@ -21,6 +21,12 @@ public final class Empleado extends Persona{
         this.sede = sede;
     }
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+    
+
     /**
      * @return the activo
      */

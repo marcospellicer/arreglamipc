@@ -22,6 +22,11 @@ public abstract class Persona {
         this.fecha = fecha;
     }
 
+    @Override
+    public String toString() {
+        return codigo+" , "+nombre;
+    }
+    
     /**
      * @return the codigo
      */
