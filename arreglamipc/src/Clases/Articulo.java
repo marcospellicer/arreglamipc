@@ -28,6 +28,11 @@ public class Articulo {
         this.ean = ean;
     }
 
+    @Override
+    public String toString() {
+        return codigo + ". " + desc;
+    }
+
     /**
      * @return the codigo
      */

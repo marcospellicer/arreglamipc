@@ -7,6 +7,7 @@ package arreglamipc;
 
 import Clases.Empleado;
 import javax.swing.JOptionPane;
+import Bd.Bd;
 
 /**
  *
@@ -22,6 +23,7 @@ public class Login extends javax.swing.JFrame {
          this.setLocationRelativeTo(null);
         jLabelIcono.setFocusable(true);
         empleado = null;
+       bd = new Bd();
     }
 
     /**
@@ -158,17 +160,19 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     private void jButtonEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEntrarActionPerformed
-        //empleado = login(jTextFieldNombre.getText(),jPasswordField1.getText());
+        if(jTextFieldNombre.getText().equals(jPasswordField1.getText())){
         
-       // if(empleado!=null){
+        empleado = bd.login(jTextFieldNombre.getText());
+        
+       if(empleado!=null){
             
-            //if(empleado.getCategoria().equalsIgnoreCase("tecnico")){
+           if(empleado.getCategoria().equalsIgnoreCase("tecnico")){
                 
                 SesionTecnico v = new SesionTecnico(empleado);
                 v.setVisible(true);
                 v.setLocationRelativeTo(this);
                 this.dispose();
-          /*      
+               
             }else if(empleado.getCategoria().equalsIgnoreCase("comercial")){
                 SesionComerical v = new SesionComerical(empleado);
                 v.setVisible(true);
@@ -179,7 +183,7 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Usuaario o contraseña incorrectos");
 
         }
-*/
+                }
     }//GEN-LAST:event_jButtonEntrarActionPerformed
 
     /**
@@ -216,6 +220,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
     }
+    private Bd bd;
     private Empleado empleado;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonEntrar;

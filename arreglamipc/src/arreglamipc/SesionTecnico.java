@@ -19,7 +19,7 @@ public class SesionTecnico extends javax.swing.JFrame {
     public SesionTecnico(Empleado emp) {
         initComponents();
         this.empleado=emp;
-      //   jLabelTitulo.setText("  "+empleado.getNombre().toUpperCase()+" [ "+empleado.getCategoria().toUpperCase()+" ] ");
+       jLabelTitulo.setText("  "+empleado.getNombre().toUpperCase()+" [ "+empleado.getCategoria().toUpperCase()+" ] ");
     }
 
     /**

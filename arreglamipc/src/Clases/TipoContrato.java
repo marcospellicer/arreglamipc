@@ -26,6 +26,12 @@ public class TipoContrato {
         this.importeAnual = importeAnual;
     }
 
+    @Override
+    public String toString() {
+        return nombre;
+    }
+    
+
     /**
      * @return the codigo
      */

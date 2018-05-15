@@ -26,6 +26,12 @@ public class Contrato {
         this.importe = importe;
     }
 
+    @Override
+    public String toString() {
+        return codigo + "." + tipo.toString();
+    }
+
+    
     /**
      * @return the codigo
      */

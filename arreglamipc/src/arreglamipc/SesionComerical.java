@@ -40,6 +40,11 @@ public class SesionComerical extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButtonCrear.setText("Crear Venta");
+        jButtonCrear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCrearActionPerformed(evt);
+            }
+        });
 
         jButtonEditar.setText("Editar Venta");
 
@@ -103,6 +108,13 @@ public class SesionComerical extends javax.swing.JFrame {
         v.setLocationRelativeTo(this);
         this.dispose();
     }//GEN-LAST:event_jButtonSalirActionPerformed
+
+    private void jButtonCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearActionPerformed
+                AñadirVenta v = new AñadirVenta(empleado);
+                v.setVisible(true);
+                v.setLocationRelativeTo(this);
+                this.dispose();
+    }//GEN-LAST:event_jButtonCrearActionPerformed
 
     /**
      * @param args the command line arguments

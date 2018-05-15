@@ -125,7 +125,7 @@ public class Reparacion {
     /**
      * @return the finalizado
      */
-    public boolean isFinalizado() {
+    public boolean getFinalizado() {
         return finalizado;
     }
 

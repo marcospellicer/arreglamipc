@@ -5,11 +5,16 @@
  */
 package arreglamipc;
 
+import Bd.Bd;
+import Clases.Articulo;
+import Clases.Cliente;
+import Clases.Contrato;
 import Clases.Empleado;
 import Clases.Linea;
 import Clases.Reparacion;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -23,13 +28,25 @@ public class AñadirReparacion extends javax.swing.JFrame {
     public AñadirReparacion(Empleado emp) {
         initComponents();
         this.empleado=emp;
-        //jLabelTitulo.setText("  "+empleado.getNombre().toUpperCase()+" [ "+empleado.getCategoria().toUpperCase()+" ] ");
+        bd=new Bd();
+        jLabelTitulo.setText("  "+empleado.getNombre().toUpperCase()+" [ "+empleado.getCategoria().toUpperCase()+" ] ");
+        lineas = new ArrayList<>();
         jCheckBoxFacturado.setEnabled(false);
         modeloClientes = new DefaultComboBoxModel();
         modeloContratos= new DefaultComboBoxModel();
+        modeloArticulos = new DefaultComboBoxModel();
+        modeloListaArticulos = new DefaultListModel();
         jComboBoxCliente.setModel(modeloClientes);
         jComboBoxContrato.setModel(modeloContratos);
-        
+        jComboBoxArticulos.setModel(modeloArticulos);
+        jList1.setModel(modeloListaArticulos);
+        config();
+    }
+    private void config(){
+       ArrayList<Cliente> cli = bd.clientes();
+        for (int i = 0; i < cli.size(); i++) {
+            modeloClientes.addElement(cli.get(i));
+        }
     }
 
     /**
@@ -53,7 +70,6 @@ public class AñadirReparacion extends javax.swing.JFrame {
         jCheckBoxFinalizado = new javax.swing.JCheckBox();
         jCheckBoxFacturado = new javax.swing.JCheckBox();
         jComboBoxArticulos = new javax.swing.JComboBox<>();
-        jSpinnerUnidades = new javax.swing.JSpinner();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         jButtonBorra = new javax.swing.JButton();
@@ -61,6 +77,8 @@ public class AñadirReparacion extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jComboBoxCliente = new javax.swing.JComboBox<>();
         jComboBoxContrato = new javax.swing.JComboBox<>();
+        jLabelEan = new javax.swing.JLabel();
+        jTextFieldEan = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -106,19 +124,19 @@ public class AñadirReparacion extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxArticulos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jSpinnerUnidades.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
-
         jScrollPane1.setViewportView(jList1);
 
         jButtonBorra.setText("-");
 
         jButtonAñadir.setText("+");
+        jButtonAñadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAñadirActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Contrato");
 
-        jComboBoxContrato.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBoxContrato.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jComboBoxContratoFocusGained(evt);
@@ -127,6 +145,14 @@ public class AñadirReparacion extends javax.swing.JFrame {
         jComboBoxContrato.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxContratoActionPerformed(evt);
+            }
+        });
+
+        jLabelEan.setText("ean");
+
+        jTextFieldEan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldEanActionPerformed(evt);
             }
         });
 
@@ -142,16 +168,14 @@ public class AñadirReparacion extends javax.swing.JFrame {
                         .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(85, 85, 85)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jCheckBoxFinalizado, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButtonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -159,29 +183,34 @@ public class AñadirReparacion extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jSpinnerDes, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
                                     .addComponent(jSpinnerTiempo))
-                                .addGap(84, 84, 84)
-                                .addComponent(jCheckBoxFacturado, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(26, 26, 26)
+                                .addComponent(jLabelEan)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldEan, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(34, 34, 34)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBoxContrato, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBoxCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(jComboBoxCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBoxContrato, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(38, 38, 38)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCheckBoxFacturado, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jCheckBoxFinalizado, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createSequentialGroup()
                                 .addGap(8, 8, 8)
                                 .addComponent(jButtonBorra, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jComboBoxArticulos, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jSpinnerUnidades, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jComboBoxArticulos, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(21, 21, 21)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -198,34 +227,34 @@ public class AñadirReparacion extends javax.swing.JFrame {
                         .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBoxFinalizado))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxContrato, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBoxFacturado))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBoxCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBoxContrato, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBoxFinalizado)
-                        .addGap(28, 28, 28)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinnerTiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBoxFacturado))
-                .addGap(7, 7, 7)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinnerDes, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSpinnerTiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(7, 7, 7)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSpinnerDes, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelEan, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldEan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jSpinnerUnidades, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBoxArticulos, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxArticulos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonBorra, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -246,6 +275,9 @@ public class AñadirReparacion extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonSalirActionPerformed
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
+        Cliente c = (Cliente)jComboBoxCliente.getSelectedItem();
+        Contrato con = (Contrato)jComboBoxContrato.getSelectedItem();
+        Reparacion r = new Reparacion(0, c, con, (int)jSpinnerTiempo.getValue(), (int)jSpinnerDes.getValue(), "fecha", jCheckBoxFinalizado.isSelected() , empleado, jTextFieldEan.getText(), lineas);
         
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
@@ -268,15 +300,37 @@ public class AñadirReparacion extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBoxContratoActionPerformed
 
     private void jComboBoxContratoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jComboBoxContratoFocusGained
-      Empleado e = new Empleado(true, "tecnico", 1, 0, "pepe", "12348", "132468");
-        modeloContratos.addElement(e);
+      ArrayList<Contrato> con = bd.contratos((Cliente)jComboBoxCliente.getSelectedItem());
+      modeloContratos.removeAllElements();
+        for (int i = 0; i < con.size(); i++) {
+            modeloContratos.addElement(con.get(i));
+        }
+        
     }//GEN-LAST:event_jComboBoxContratoFocusGained
+
+    private void jButtonAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAñadirActionPerformed
+        Articulo a = (Articulo) modeloArticulos.getSelectedItem();
+        Linea l = new Linea(a, 1);
+        lineas.add(l);
+        modeloListaArticulos.clear();
+        for (int i = 0; i < lineas.size(); i++) {
+            modeloListaArticulos.addElement(lineas.get(i));
+        }
+    }//GEN-LAST:event_jButtonAñadirActionPerformed
+
+    private void jTextFieldEanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEanActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldEanActionPerformed
 
     /**
      * @param args the command line arguments
      */
+    private Bd bd;
+    private DefaultListModel modeloListaArticulos;
+    private DefaultComboBoxModel modeloArticulos;
     private DefaultComboBoxModel modeloContratos;
     private DefaultComboBoxModel modeloClientes;
+    private ArrayList<Linea> lineas;
     private Empleado empleado;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAñadir;
@@ -292,12 +346,13 @@ public class AñadirReparacion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabelEan;
     private javax.swing.JLabel jLabelIcono;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinnerDes;
     private javax.swing.JSpinner jSpinnerTiempo;
-    private javax.swing.JSpinner jSpinnerUnidades;
+    private javax.swing.JTextField jTextFieldEan;
     // End of variables declaration//GEN-END:variables
 }
