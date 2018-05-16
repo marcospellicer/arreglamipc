@@ -5,9 +5,11 @@
  */
 package Bd;
 
+import Clases.Articulo;
 import Clases.Cliente;
 import Clases.Contrato;
 import Clases.Empleado;
+import Clases.Linea;
 import Clases.Reparacion;
 import Clases.TipoContrato;
 import com.mysql.jdbc.Connection;
@@ -110,17 +112,75 @@ public class Bd {
         desconectar();
         return e;
     }
-    private void insertarReparacion(Reparacion r){
+    public void insertarLineas(Linea a , int cod){
         conectar();
-        TipoContrato e = null;
         try {
-           // PreparedStatement s = (PreparedStatement)  con.createStatement("insert into reparacion values(0,?,?,sysdate(),?,?,null,?,?,?);");
-            
+           PreparedStatement ps = (PreparedStatement)  con.prepareStatement("insert into lista_rep values(0,?,?,?,?,?,?);");
+           ps.setInt(1, a.getUnidades());
+           ps.setDouble(2, a.getArticulo().getPrecio());
+           ps.setInt(3, a.getArticulo().getCodigo());
+           ps.setDouble(4, (a.getUnidades()*a.getArticulo().getPrecio()));
+           ps.setInt(5, cod);
+           ps.setInt(6, a.getArticulo().getCodigo());
+           ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        desconectar();
+    }
+    public ArrayList<Articulo> articulos(){
+        conectar();
+        ArrayList<Articulo> e = new ArrayList<>();
+        try {
+            Statement s = (Statement) con.createStatement();
+            ResultSet rs = s.executeQuery("select * from articulo;");
+            while(rs.next()){
+              Articulo co = new Articulo(rs.getInt("cod_art"),rs.getString("descri"),rs.getString("marca"),rs.getString("fecha_ult_comp"),rs.getDouble("precio_vent"),rs.getDouble("iva"),rs.getString("ean"));
+              e.add(co);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
         }
         desconectar();
         return e;
+    }
+    public int ultimo(){
+        conectar();
+        int e = 0;
+        try {
+            Statement s = (Statement) con.createStatement();
+            ResultSet rs = s.executeQuery("select count(*) from reparacion;");
+            if(rs.first()){
+              e=rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        desconectar();
+        return e;
+    }
+    public void insertarReparacion(Reparacion r){
+        conectar();
+        TipoContrato e = null;
+        try {
+           PreparedStatement ps = (PreparedStatement)  con.prepareStatement("insert into reparacion values(0,?,?,curdate(),?,?,null,?,?,?,?);");
+           ps.setInt(1, r.getTiempo());
+           ps.setInt(2, r.getDesplazamiento());
+           ps.setBoolean(3, r.getFinalizado());
+           ps.setBoolean(4, r.getFinalizado());
+           ps.setString(5, r.getEan());
+           ps.setInt(6, r.getCliente().getCodigo());
+           ps.setInt(7, r.getContrato().getCodigo());
+           ps.setInt(8, r.getTecnico().getCodigo());
+           ps.executeUpdate();
+           int ult = ultimo();
+            for (int i = 0; i < r.getArticulso().size(); i++) {
+                insertarLineas(r.getArticulso().get(i), ult);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        desconectar();
     }
     
 }

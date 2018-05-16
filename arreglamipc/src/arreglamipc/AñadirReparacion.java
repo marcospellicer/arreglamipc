@@ -47,6 +47,10 @@ public class AñadirReparacion extends javax.swing.JFrame {
         for (int i = 0; i < cli.size(); i++) {
             modeloClientes.addElement(cli.get(i));
         }
+        ArrayList<Articulo> art = bd.articulos();
+        for (int i = 0; i < art.size(); i++) {
+            modeloArticulos.addElement(art.get(i));
+        }
     }
 
     /**
@@ -127,6 +131,11 @@ public class AñadirReparacion extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jList1);
 
         jButtonBorra.setText("-");
+        jButtonBorra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorraActionPerformed(evt);
+            }
+        });
 
         jButtonAñadir.setText("+");
         jButtonAñadir.addActionListener(new java.awt.event.ActionListener() {
@@ -278,7 +287,7 @@ public class AñadirReparacion extends javax.swing.JFrame {
         Cliente c = (Cliente)jComboBoxCliente.getSelectedItem();
         Contrato con = (Contrato)jComboBoxContrato.getSelectedItem();
         Reparacion r = new Reparacion(0, c, con, (int)jSpinnerTiempo.getValue(), (int)jSpinnerDes.getValue(), "fecha", jCheckBoxFinalizado.isSelected() , empleado, jTextFieldEan.getText(), lineas);
-        
+        bd.insertarReparacion(r);
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
     private void jCheckBoxFacturadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFacturadoActionPerformed
@@ -321,6 +330,16 @@ public class AñadirReparacion extends javax.swing.JFrame {
     private void jTextFieldEanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEanActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldEanActionPerformed
+
+    private void jButtonBorraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorraActionPerformed
+       if(jList1.getSelectedIndex()>=0){
+        lineas.remove(jList1.getSelectedIndex());
+        modeloListaArticulos.clear();
+        for (int i = 0; i < lineas.size(); i++) {
+            modeloListaArticulos.addElement(lineas.get(i));
+        }
+       }
+    }//GEN-LAST:event_jButtonBorraActionPerformed
 
     /**
      * @param args the command line arguments

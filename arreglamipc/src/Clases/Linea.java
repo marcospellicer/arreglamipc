@@ -25,6 +25,11 @@ public class Linea {
         return articulo;
     }
 
+    @Override
+    public String toString() {
+        return articulo.toString() + " unidades : " + unidades;
+    }
+        
     /**
      * @param articulo the articulo to set
      */

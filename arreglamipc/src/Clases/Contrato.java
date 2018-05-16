@@ -28,7 +28,7 @@ public class Contrato {
 
     @Override
     public String toString() {
-        return codigo + "." + tipo.toString();
+        return codigo + ".   " + tipo.toString();
     }
 
     
