@@ -7,7 +7,8 @@ package Clases;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * interfaz para implementar los metodos de imprimir calcularTotal y finalizar a la calse de venta
  */
 public interface Ventas {
    public String imprimir();

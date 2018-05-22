@@ -7,7 +7,8 @@ package Clases;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * clase para crear objetos de lineas de venta esta formado poir un objeto articulo y unas unidades
  */
 public class Linea {
     private Articulo articulo;

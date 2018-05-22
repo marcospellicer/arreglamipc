@@ -11,7 +11,8 @@ import java.util.ArrayList;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * clase para crear objetos de reparacion tabien compuesta por un vector de lineas de venta
  */
 public class Reparacion {
    private int codigo;

@@ -7,7 +7,8 @@ package Clases;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * clase para crear objetos de tipo de contrato
  */
 public class TipoContrato {
   private int codigo;

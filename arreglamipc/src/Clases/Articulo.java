@@ -7,7 +7,8 @@ package Clases;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * clase para crear objetos de articulo
  */
 public class Articulo {
     private int codigo;
@@ -18,6 +19,7 @@ public class Articulo {
     private double iva;
     private String ean;
 
+    
     public Articulo(int codigo, String desc, String marca, String fechaUltimaCompra, double precio, double iva, String ean) {
         this.codigo = codigo;
         this.desc = desc;
@@ -27,6 +29,12 @@ public class Articulo {
         this.iva = iva;
         this.ean = ean;
     }
+    
+    /**
+     * 
+     * mustra la el codigo y nombre del articulo
+     * @return string
+     */
 
     @Override
     public String toString() {

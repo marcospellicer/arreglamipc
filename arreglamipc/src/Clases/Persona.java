@@ -7,7 +7,8 @@ package Clases;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * clase que no permite crear objetos solo esta pra ser el padre de cliente y empleado
  */
 public abstract class Persona {
    private int codigo;

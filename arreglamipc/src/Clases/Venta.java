@@ -9,7 +9,8 @@ import java.util.ArrayList;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * clase para crear un objeto de venta , contiene un vector de lineas de articulos implementa de ventas
  */
 public class Venta implements Ventas{
     private int codigo;

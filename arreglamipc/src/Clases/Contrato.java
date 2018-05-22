@@ -7,7 +7,8 @@ package Clases;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * clase para crear contratos
  */
 public class Contrato {
     private int codigo;

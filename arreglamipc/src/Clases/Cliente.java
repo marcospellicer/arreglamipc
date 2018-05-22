@@ -7,7 +7,8 @@ package Clases;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * calse para crear objetos de clientes hereda de Personas
  */
 public final class Cliente extends Persona{
     private String direccion;

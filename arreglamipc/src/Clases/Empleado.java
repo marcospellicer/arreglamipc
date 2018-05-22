@@ -7,7 +7,8 @@ package Clases;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * clase para crear objetos de empleado hereda de Persona
  */
 public final class Empleado extends Persona{
    private boolean activo;
