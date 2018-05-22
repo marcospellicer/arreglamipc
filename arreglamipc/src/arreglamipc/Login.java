@@ -11,7 +11,8 @@ import Bd.Bd;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * login
  */
 public class Login extends javax.swing.JFrame {
 

@@ -6,27 +6,31 @@
 package arreglamipc;
 
 import Bd.Bd;
+import Clases.Articulo;
 import Clases.Cliente;
 import Clases.Empleado;
 import Clases.Linea;
 import Clases.Reparacion;
+import Clases.Venta;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * clase para añadir ventas
  */
 public class AñadirVenta extends javax.swing.JFrame {
 
     /**
-     * Creates new form SesionTecnico
+     * Creates new form AñadirVentas
      */
     public AñadirVenta(Empleado emp) {
         initComponents();
         bd=new Bd();
         this.empleado=emp;
+        lineas = new ArrayList<>();
         jLabelTitulo.setText("  "+empleado.getNombre().toUpperCase()+" [ "+empleado.getCategoria().toUpperCase()+" ] ");
         jCheckBoxPagado.setEnabled(false);
         modeloClientes = new DefaultComboBoxModel();
@@ -41,6 +45,10 @@ public class AñadirVenta extends javax.swing.JFrame {
        ArrayList<Cliente> cli = bd.clientes();
         for (int i = 0; i < cli.size(); i++) {
             modeloClientes.addElement(cli.get(i));
+        }
+          ArrayList<Articulo> art = bd.articulos();
+        for (int i = 0; i < art.size(); i++) {
+            modeloArticulos.addElement(art.get(i));
         }
     }
     /**
@@ -109,8 +117,18 @@ public class AñadirVenta extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jList1);
 
         jButtonBorra.setText("-");
+        jButtonBorra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorraActionPerformed(evt);
+            }
+        });
 
         jButtonAñadir.setText("+");
+        jButtonAñadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAñadirActionPerformed(evt);
+            }
+        });
 
         jComboBoxPago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "contado", "tarjeta", "banco" }));
 
@@ -199,14 +217,18 @@ public class AñadirVenta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
-        SesionTecnico v = new SesionTecnico(empleado);
+        SesionComerical v = new SesionComerical(empleado);
         v.setVisible(true);
         v.setLocationRelativeTo(this);
         this.dispose();
     }//GEN-LAST:event_jButtonSalirActionPerformed
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
-        
+       if(!lineas.isEmpty()){
+        Cliente c = (Cliente)jComboBoxCliente.getSelectedItem();
+        Venta r = new Venta(0, c, jCheckBoxFinalizado.isSelected(), jCheckBoxPagado.isSelected(), empleado, lineas);
+        bd.insertarVenta(r);
+       }
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
     private void jCheckBoxPagadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxPagadoActionPerformed
@@ -223,10 +245,32 @@ public class AñadirVenta extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jCheckBoxFinalizadoActionPerformed
 
+    private void jButtonAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAñadirActionPerformed
+         Articulo a = (Articulo) modeloArticulos.getSelectedItem();
+        Linea l = new Linea(a, 1);
+        lineas.add(l);
+        modeloListaArticulos.clear();
+        for (int i = 0; i < lineas.size(); i++) {
+            modeloListaArticulos.addElement(lineas.get(i));
+        }
+    }//GEN-LAST:event_jButtonAñadirActionPerformed
+
+    private void jButtonBorraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorraActionPerformed
+       if(jList1.getSelectedIndex()>=0){
+        lineas.remove(jList1.getSelectedIndex());
+        modeloListaArticulos.clear();
+        for (int i = 0; i < lineas.size(); i++) {
+            modeloListaArticulos.addElement(lineas.get(i));
+        }
+       }
+    }//GEN-LAST:event_jButtonBorraActionPerformed
+
     /**
      * @param args the command line arguments
      */
+    
     private Bd bd;
+    private ArrayList<Linea> lineas;
     private DefaultListModel modeloListaArticulos;
     private DefaultComboBoxModel modeloArticulos;
     private DefaultComboBoxModel modeloClientes;

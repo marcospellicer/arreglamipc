@@ -9,7 +9,9 @@ import Clases.Empleado;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ *clase para la gestion del comercial 
+ *
  */
 public class SesionComerical extends javax.swing.JFrame {
 
@@ -32,7 +34,7 @@ public class SesionComerical extends javax.swing.JFrame {
     private void initComponents() {
 
         jButtonCrear = new javax.swing.JButton();
-        jButtonEditar = new javax.swing.JButton();
+        jButtonVer = new javax.swing.JButton();
         jButtonSalir = new javax.swing.JButton();
         jLabelTitulo = new javax.swing.JLabel();
         jLabelIcono = new javax.swing.JLabel();
@@ -46,7 +48,12 @@ public class SesionComerical extends javax.swing.JFrame {
             }
         });
 
-        jButtonEditar.setText("Editar Venta");
+        jButtonVer.setText("Ver Ventas");
+        jButtonVer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVerActionPerformed(evt);
+            }
+        });
 
         jButtonSalir.setText("Salir");
         jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -69,7 +76,7 @@ public class SesionComerical extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(67, 67, 67)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonVer, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jButtonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(16, 16, 16)))
@@ -95,7 +102,7 @@ public class SesionComerical extends javax.swing.JFrame {
                 .addGap(66, 66, 66)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonVer, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(42, Short.MAX_VALUE))
         );
 
@@ -116,6 +123,13 @@ public class SesionComerical extends javax.swing.JFrame {
                 this.dispose();
     }//GEN-LAST:event_jButtonCrearActionPerformed
 
+    private void jButtonVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerActionPerformed
+         VerVentas v = new VerVentas(empleado);
+                v.setVisible(true);
+                v.setLocationRelativeTo(this);
+                this.dispose();
+    }//GEN-LAST:event_jButtonVerActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -123,8 +137,8 @@ public class SesionComerical extends javax.swing.JFrame {
     private Empleado empleado;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCrear;
-    private javax.swing.JButton jButtonEditar;
     private javax.swing.JButton jButtonSalir;
+    private javax.swing.JButton jButtonVer;
     private javax.swing.JLabel jLabelIcono;
     private javax.swing.JLabel jLabelTitulo;
     // End of variables declaration//GEN-END:variables

@@ -15,10 +15,12 @@ import Clases.Reparacion;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * clase para añadir reparaciones
  */
 public class AñadirReparacion extends javax.swing.JFrame {
 
@@ -62,6 +64,8 @@ public class AñadirReparacion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jButtonSalir = new javax.swing.JButton();
         jLabelIcono = new javax.swing.JLabel();
         jLabelTitulo = new javax.swing.JLabel();
@@ -83,6 +87,20 @@ public class AñadirReparacion extends javax.swing.JFrame {
         jComboBoxContrato = new javax.swing.JComboBox<>();
         jLabelEan = new javax.swing.JLabel();
         jTextFieldEan = new javax.swing.JTextField();
+        jLabelEan2 = new javax.swing.JLabel();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -146,6 +164,12 @@ public class AñadirReparacion extends javax.swing.JFrame {
 
         jLabel5.setText("Contrato");
 
+        jComboBoxCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxClienteActionPerformed(evt);
+            }
+        });
+
         jComboBoxContrato.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jComboBoxContratoFocusGained(evt);
@@ -159,6 +183,11 @@ public class AñadirReparacion extends javax.swing.JFrame {
 
         jLabelEan.setText("ean");
 
+        jTextFieldEan.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldEanFocusLost(evt);
+            }
+        });
         jTextFieldEan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldEanActionPerformed(evt);
@@ -193,9 +222,12 @@ public class AñadirReparacion extends javax.swing.JFrame {
                                     .addComponent(jSpinnerDes, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
                                     .addComponent(jSpinnerTiempo))
                                 .addGap(26, 26, 26)
-                                .addComponent(jLabelEan)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextFieldEan, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabelEan)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextFieldEan, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabelEan2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -255,7 +287,8 @@ public class AñadirReparacion extends javax.swing.JFrame {
                         .addGap(7, 7, 7)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinnerDes, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jSpinnerDes, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelEan2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -284,10 +317,14 @@ public class AñadirReparacion extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonSalirActionPerformed
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
+       if(terminar&&(int)jSpinnerTiempo.getValue()>0){
         Cliente c = (Cliente)jComboBoxCliente.getSelectedItem();
         Contrato con = (Contrato)jComboBoxContrato.getSelectedItem();
         Reparacion r = new Reparacion(0, c, con, (int)jSpinnerTiempo.getValue(), (int)jSpinnerDes.getValue(), "fecha", jCheckBoxFinalizado.isSelected() , empleado, jTextFieldEan.getText(), lineas);
         bd.insertarReparacion(r);
+       }else{
+           JOptionPane.showMessageDialog(rootPane, "rellena todos los campos");
+       }
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
     private void jCheckBoxFacturadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFacturadoActionPerformed
@@ -341,9 +378,25 @@ public class AñadirReparacion extends javax.swing.JFrame {
        }
     }//GEN-LAST:event_jButtonBorraActionPerformed
 
+    private void jTextFieldEanFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldEanFocusLost
+        int i = bd.ean(jTextFieldEan.getText());
+        if(i==1){
+            terminar=true;
+            jLabelEan2.setText(bd.nombreEan(jTextFieldEan.getText()));
+        }else{
+            terminar=false;
+            jLabelEan2.setText("EL ARTICULO NO EXISTE");
+        }
+    }//GEN-LAST:event_jTextFieldEanFocusLost
+
+    private void jComboBoxClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxClienteActionPerformed
+      modeloContratos.removeAllElements();
+    }//GEN-LAST:event_jComboBoxClienteActionPerformed
+
     /**
      * @param args the command line arguments
      */
+    private boolean terminar;
     private Bd bd;
     private DefaultListModel modeloListaArticulos;
     private DefaultComboBoxModel modeloArticulos;
@@ -366,12 +419,15 @@ public class AñadirReparacion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelEan;
+    private javax.swing.JLabel jLabelEan2;
     private javax.swing.JLabel jLabelIcono;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSpinner jSpinnerDes;
     private javax.swing.JSpinner jSpinnerTiempo;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFieldEan;
     // End of variables declaration//GEN-END:variables
 }

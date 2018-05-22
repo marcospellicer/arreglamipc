@@ -12,6 +12,7 @@ import Clases.Empleado;
 import Clases.Linea;
 import Clases.Reparacion;
 import Clases.TipoContrato;
+import Clases.Venta;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import java.sql.DriverManager;
@@ -21,11 +22,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 import sun.invoke.empty.Empty;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * clase se conecsion a la base de datos y consultas
  */
 public class Bd {
     private Connection con;
@@ -112,16 +115,17 @@ public class Bd {
         desconectar();
         return e;
     }
-    public void insertarLineas(Linea a , int cod){
+    public void insertarLineas(Linea a , int cod, int linea){
         conectar();
         try {
-           PreparedStatement ps = (PreparedStatement)  con.prepareStatement("insert into lista_rep values(0,?,?,?,?,?,?);");
-           ps.setInt(1, a.getUnidades());
-           ps.setDouble(2, a.getArticulo().getPrecio());
-           ps.setInt(3, a.getArticulo().getCodigo());
-           ps.setDouble(4, (a.getUnidades()*a.getArticulo().getPrecio()));
-           ps.setInt(5, cod);
-           ps.setInt(6, a.getArticulo().getCodigo());
+           PreparedStatement ps = (PreparedStatement)  con.prepareStatement("insert into lista_rep values(?,?,?,?,?,?,?);");
+           ps.setInt(1 ,linea);
+           ps.setInt(2, a.getUnidades());
+           ps.setDouble(3, a.getArticulo().getPrecio());
+           ps.setInt(4, a.getArticulo().getCodigo());
+           ps.setDouble(5, (a.getUnidades()*a.getArticulo().getPrecio()));
+           ps.setInt(6, cod);
+           ps.setInt(7, a.getArticulo().getCodigo());
            ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
@@ -144,12 +148,12 @@ public class Bd {
         desconectar();
         return e;
     }
-    public int ultimo(){
+    public int ultimo(String tabla){
         conectar();
         int e = 0;
         try {
             Statement s = (Statement) con.createStatement();
-            ResultSet rs = s.executeQuery("select count(*) from reparacion;");
+            ResultSet rs = s.executeQuery("select count(*) from "+tabla+";");
             if(rs.first()){
               e=rs.getInt(1);
             }
@@ -173,14 +177,175 @@ public class Bd {
            ps.setInt(7, r.getContrato().getCodigo());
            ps.setInt(8, r.getTecnico().getCodigo());
            ps.executeUpdate();
-           int ult = ultimo();
+           int ult = ultimo("reparacion");
+           int nLinea=0;
             for (int i = 0; i < r.getArticulso().size(); i++) {
-                insertarLineas(r.getArticulso().get(i), ult);
+                nLinea=i+1;
+                insertarLineas(r.getArticulso().get(i), ult ,nLinea);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
         }
         desconectar();
     }
-    
+    public void insertarVenta(Venta r){
+        conectar();
+        TipoContrato e = null;
+        try {
+           PreparedStatement ps = (PreparedStatement)  con.prepareStatement("insert into venta values(0,?,?,curdate(),'contado',null,?,?);");
+           ps.setBoolean(1, r.isFinalizada());
+           ps.setBoolean(2, r.isPagada());
+           ps.setInt(3, r.getCliente().getCodigo());
+           ps.setInt(4, r.getComercial().getCodigo());
+           ps.executeUpdate();
+           int ult = ultimo("venta");
+           int nLinea=0;
+            for (int i = 0; i < r.getArticulos().size(); i++) {
+                nLinea=i+1;
+                insertarLineasVenta(r.getArticulos().get(i), ult , nLinea);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        desconectar();
+    }
+    public void insertarLineasVenta(Linea a , int cod , int lineas){
+        conectar();
+        try {
+           PreparedStatement ps = (PreparedStatement)  con.prepareStatement("insert into lista_venta values(?,?,?,?,?,?,?);");
+           ps.setInt(1, lineas);
+           ps.setInt(2, a.getUnidades());
+           ps.setDouble(3, a.getArticulo().getPrecio());
+           ps.setInt(4, a.getArticulo().getCodigo());
+           ps.setDouble(5, (a.getUnidades()*a.getArticulo().getPrecio()));
+           ps.setInt(6, cod);
+           ps.setInt(7, a.getArticulo().getCodigo());
+           ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        desconectar();
+    }
+    public int ean(String ean){
+        conectar();
+        int e = 0;
+        try {
+            Statement s = (Statement) con.createStatement();
+            ResultSet rs = s.executeQuery("select count(*) from articulo where ean="+ean+";");
+            if(rs.first()){
+              e=rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        desconectar();
+        return e;
+    }
+    public String nombreEan(String ean){
+        conectar();
+        String e = "";
+        try {
+            Statement s = (Statement) con.createStatement();
+            ResultSet rs = s.executeQuery("select descri from articulo where ean="+ean+";");
+            if(rs.first()){
+              e=rs.getString(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        desconectar();
+        return e;
+    }
+    public DefaultTableModel rellenarTabla(int aux){
+        conectar();
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("codigo");
+        modelo.addColumn("fecha");
+        modelo.addColumn("finalizada");
+        modelo.addColumn("cliente");
+        modelo.addColumn("operario");
+        try {
+            Statement s = (Statement) con.createStatement();
+            ResultSet rs = s.executeQuery("select cod_re , fecha , finalizada , cod_cli , cod_op from reparacion where cod_cli="+aux+";");
+            while(rs.next()){
+              Object [] fila = new Object[5];
+              for (int i=0;i<fila.length;i++)
+                fila[i] = rs.getObject(i+1); 
+              modelo.addRow(fila); 
+              }
+        } catch (SQLException ex) {
+            Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        desconectar();
+        return modelo;
+    }
+    public DefaultTableModel rellenarTablaT(){
+        conectar();
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("codigo");
+        modelo.addColumn("fecha");
+        modelo.addColumn("finalizada");
+        modelo.addColumn("cliente");
+        modelo.addColumn("operario");        
+        try {
+            Statement s = (Statement) con.createStatement();
+            ResultSet rs = s.executeQuery("select cod_re , fecha , finalizada , cod_cli , cod_op from reparacion;");
+            while(rs.next()){
+              Object [] fila = new Object[5];
+              for (int i=0;i<fila.length;i++)
+                fila[i] = rs.getObject(i+1); 
+              modelo.addRow(fila); 
+              }
+        } catch (SQLException ex) {
+            Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        desconectar();
+        return modelo;
+    }
+    public DefaultTableModel rellenarTablaVentas(int aux){
+        conectar();
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("codigo");
+        modelo.addColumn("pagada");
+        modelo.addColumn("fecha");
+        modelo.addColumn("cliente");
+        modelo.addColumn("operario");
+        try {
+            Statement s = (Statement) con.createStatement();
+            ResultSet rs = s.executeQuery("select cod_venta , pagada , fecha , cod_cli , cod_op from venta where cod_cli="+aux+";");
+            while(rs.next()){
+              Object [] fila = new Object[5];
+              for (int i=0;i<fila.length;i++)
+                fila[i] = rs.getObject(i+1); 
+              modelo.addRow(fila); 
+              }
+        } catch (SQLException ex) {
+            Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        desconectar();
+        return modelo;
+    }
+     public DefaultTableModel rellenarTablaVentasT(){
+        conectar();
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("codigo");
+        modelo.addColumn("pagada");
+        modelo.addColumn("fecha");
+        modelo.addColumn("cliente");
+        modelo.addColumn("operario");
+        try {
+            Statement s = (Statement) con.createStatement();
+            ResultSet rs = s.executeQuery("select cod_venta , pagada , fecha , cod_cli , cod_op from venta;");
+            while(rs.next()){
+              Object [] fila = new Object[5];
+              for (int i=0;i<fila.length;i++)
+                fila[i] = rs.getObject(i+1); 
+              modelo.addRow(fila); 
+              }
+        } catch (SQLException ex) {
+            Logger.getLogger(Bd.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        desconectar();
+        return modelo;
+    }
 }

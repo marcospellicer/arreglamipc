@@ -9,7 +9,8 @@ import Clases.Empleado;
 
 /**
  *
- * @author alumno
+ * @author marcos
+ * calse para gestion del tecnico
  */
 public class SesionTecnico extends javax.swing.JFrame {
 
@@ -57,7 +58,12 @@ public class SesionTecnico extends javax.swing.JFrame {
             }
         });
 
-        jButtonEditar.setText("Editar Reparacion");
+        jButtonEditar.setText("Ver Reparacion");
+        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,6 +119,13 @@ public class SesionTecnico extends javax.swing.JFrame {
                 v.setLocationRelativeTo(this);
                 this.dispose();
     }//GEN-LAST:event_jButtonCrearActionPerformed
+
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
+         VerReparaciones v = new VerReparaciones(empleado);
+                v.setVisible(true);
+                v.setLocationRelativeTo(this);
+                this.dispose();
+    }//GEN-LAST:event_jButtonEditarActionPerformed
 
     /**
      * @param args the command line arguments
